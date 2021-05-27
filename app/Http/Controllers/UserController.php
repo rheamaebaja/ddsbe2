@@ -56,14 +56,17 @@
         * @return Illuminate\Http\Response
         */
         
-        public function show($id){
-            $user = User::where('userid', $id)->first();
-            if ($user){
-                return $this->successResponse($user);
-                    }
-            {
-            return $this->errorResponse('User ID Does Not Exist', Response::HTTP_NOT_FOUND);
-            }
+        public function show($id)
+        {
+            $user = User::findOrFail($id);
+            return $this->successResponse($user);
+            // $user = User::where('userid', $id)->first();
+            // if ($user){
+            //     return $this->successResponse($user);
+            //         }
+            // {
+            // return $this->errorResponse('User ID Does Not Exist', Response::HTTP_NOT_FOUND);
+            // }
         }
 
         /**
@@ -80,10 +83,10 @@
 
             $this->validate($request, $rules);
 
-            //$user = User::findOrFail($id);
-            $user = User::where('userid', $id)->first();
+            $user = User::findOrFail($id);
+            // $user = User::where('userid', $id)->first();
 
-                if ($user){
+            //     if ($user){
                 $user->fill($request->all());
 
             // if no changes happen
@@ -94,23 +97,25 @@
             $user->save();
             return $this->successResponse($user);
         }
-        {
-            return $this->errorResponse('User ID Does Not Exists', Response::HTTP_NOT_FOUND);
-        }
-    }
+        // {
+        //     return $this->errorResponse('User ID Does Not Exists', Response::HTTP_NOT_FOUND);
+        // }
+    
 
     public function delete($id)
     {
-        $user = User::where('userid', $id)->first();
-        if($user){
-            $user->delete();
-            return $this->successResponse($user);
-        }
-        {
-            return $this->errorResponse('User ID does not exit', Response::HTTP_NOT_FOUND);
-        }
+        $user = User::findOrFail($id);
+        $user->delete();
+        return $this->errorResponse('User ID Does not Exist', Response::HTTP_NOT_FOUND);
+        // $user = User::where('userid', $id)->first();
+        // if($user){
+        //     $user->delete();
+        //     return $this->successResponse($user);
+        // }
+        // {
+        //     return $this->errorResponse('User ID does not exit', Response::HTTP_NOT_FOUND);
+        // }
     }
-
 }
 
 ?>
